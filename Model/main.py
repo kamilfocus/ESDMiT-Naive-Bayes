@@ -4,6 +4,7 @@ import logging
 from qrs_data import QrsData
 from qrs_data_splitter import QrsDataSplitter
 from class_splitter import ClassSplitter
+from naive_bayes import NaiveBayesPredictor
 
 data_input_path  = '../ReferencyjneDane/101/ConvertedQRSRawData.txt'
 class_input_path = '../ReferencyjneDane/101/Class_IDs.txt'
@@ -76,4 +77,7 @@ if __name__ == "__main__":
 
     class_splitter = ClassSplitter(training_set)
     logging.info(class_splitter)
+    
+    naive_bayes = NaiveBayesPredictor(test_set, class_splitter)
+    logging.info(naive_bayes)
 

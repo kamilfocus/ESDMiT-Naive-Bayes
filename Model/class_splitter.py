@@ -18,7 +18,7 @@ class ClassSplitter(object):
                 separated_classes[class_item.class_id] = []
             separated_classes[class_item.class_id].append(class_item)
         return separated_classes
-
+    
     def __str__(self):
         output_str = str('Classes Summary: \n')
         for class_summary in self.class_descriptors:
