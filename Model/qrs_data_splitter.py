@@ -36,9 +36,12 @@ class QrsDataSplitter(object):
         training_set      = []
         test_set          = list(qrs_dataset)
         while self.__training_set_too_small(train_set_classes, classes_size_thr):
-            index = random.randrange(len(test_set))
+            index    = random.randrange(len(test_set))
+            class_id = test_set[index].class_id
+            if train_set_classes[class_id] >= classes_size_thr[class_id]:
+                continue
             train_item = test_set.pop(index)
-            train_set_classes[train_item.class_id] += 1
+            train_set_classes[class_id] += 1
             training_set.append(train_item)
 
         return training_set, test_set
