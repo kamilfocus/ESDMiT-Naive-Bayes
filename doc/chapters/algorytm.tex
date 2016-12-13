@@ -1,64 +1,13 @@
 \section{Algorytm}
+\label{sec_algorytm}
 
-\subsection{Twierdzenie Bayesa}
-\label{subsec_tw_bayesa}
-Twierdzenie w teorii prawdopodobieństwa określające zależność między prawdopodobieństwem warunkowym wystąpienia zdarzeń $A|B$ i $B|A$. Przyjmijmy zbiór zdarzeń $X$, w którym zdarzenia $B_i \in X$, $P(B_i)>0$ ${(i=1,2, \dots , n)}$ tworzą układ zupełny (iloczyn każdych dwóch zdarzeń jest zdarzeniem niemożliwym, natomiast suma wszystkich zdarzeń jest zdarzeniem pewnym). Wówczas dla dowolnego $A \in X$ zachodzi następująca zależność:
+\subsection{Założenia}
+\label{sec_zalozenia}
 
-	\begin{equation}
-	\label{eq_tw_bayesa_1}
-		P(B_i | A) = \frac{P(A | B_i) P(B_i)}{P(A)}
-	\end{equation}
+Jak zostało wspomniane we wstępie, Naiwny Klasyfikator Bayesa zakłada wzajemną niezależność poszczególnych cech. Pierwszym etapem jest proces uczenia klasyfikatora. W tym celu definiuje się zbiór uczący, zawierający wektory cech (w naszym przypadku są to wektory cech zespołu QRS) oraz odpowiadającą im klasę. Na podstawie zbioru uczącego tworzony jest rozkład prawdopodobieństwa, służący do klasyfikacji nowych próbek. 
 
-Wykorzystując dodatkowo wzór na prawdopodobieństwo całkowite, powyższa zależność może zostać przekształcona do następującej postaci:
+\subsection{Klasyfikacja}
+\label{sec_klasyfikacja}
 
-	\begin{equation}
-	\label{eq_tw_bayesa_2}
-		P(B_i | A) = \frac{P(A | B_i) P(B_i)}{\sum_{k=1}^{n} P(A | B_k)P(B_k)}
-	\end{equation}
-
-
-\subsection{Model probabilistyczny}
-\label{subsec_model}
-
-Zdefiniujmy k-elementowy zbiór klas $C = {\{C_1, C_2, \dots, C_k\}}$ oraz dane do klasyfikacji opisane jako wektor ${x = \{x_1, x_2, \dots, x_n\}}$ zawierający $n$ niezależnych cech. Prawdopodobieństwo przynależności do danej klasy może zostać zapisane z wykorzystaniem twierdzenia Bayesa (rozdział \ref{subsec_tw_bayesa}):
-
-	\begin{equation}
-	\label{eq_p_ck_x}
-		P(C_i | x) = \frac{P(x | C_i) P(C_i)}{P(x)}
-	\end{equation}
-
-Prawdopodobieństwo $P(x)$ występujące w mianowniku wzoru (\ref{eq_p_ck_x}) nie zależy od $C$ i jest stałe, licznik może natomiast zostać przekształcony poprzez wykorzystanie definicji prawdopodobieństwa warunkowego:
-
-	\begin{equation}
-	\label{eq_p_numerator1}
-		P(x_1, \dots , x_n | C_i)P(C_i) = P(x_1, \dots, x_n, C_i)
-	\end{equation}
-
-	\begin{equation}
-	\label{eq_p_numerator2}
-		P(x_1, \dots, x_n, C_i) = P(x_1 | x_2 , \dots , x_n, C_i)P(x_2 | x_3, \dots , x_n, 	C_i) \dots P(x_{n-1} | x_n, C_i)P(x_n | C_i)P(C_i)
-	\end{equation}
-	
-Wykorzystując przyjęte na początku założenie, że cechy ${x_1, \dots, x_n}$ są niezależne można wyprowadzić następującą zależność:
-
-	\begin{equation}
-	\label{eq_p_numerator_simp1}
-		P(x_j | x_{j+1}, \dots , x_n, C_i) = P(x_j | C_i) \quad dla \quad j = \{1, 2, \dots, n-1\}
-	\end{equation}
-
-Podstawiając (\ref{eq_p_numerator_simp1}) do równania (\ref{eq_p_numerator2}) otrzymujemy:
-	
-	\begin{equation}
-	\label{eq_p_numerator_simp2}
-		P(x_1, \dots, x_n, C_i) = P(C_i) \prod_{j = 1}^n P(x_j | C_i)
-	\end{equation}
-
-Ostatecznie wzór (\ref{eq_p_ck_x}) można zapisać w postaci:
-
-	\begin{equation}
-	\label{eq_p_ck_x_simp}
-		P(C_i | x) = \frac{P(C_i) \prod_{j = 1}^n P(x_j | C_i)}{P(x)}
-	\end{equation}
-
-
-
+\subsection{Zbiór testowy i uczący}
+\label{sec_test_ucz}
