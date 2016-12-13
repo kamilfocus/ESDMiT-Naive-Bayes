@@ -1,39 +1,4 @@
-\documentclass[10pt,a4paper]{article}
-\usepackage[polish]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage{polski}
-\usepackage{indentfirst}
-\usepackage{mathtools} 
-\usepackage[a4paper,margin=2cm]{geometry}
-\usepackage{tabularx}
-\usepackage{graphicx}
-\usepackage{float}
-
-\usepackage[hidelinks]{hyperref}
-
-\usepackage{amsmath}
-\usepackage{algorithm}
-\usepackage[noend]{algpseudocode}
-
-\frenchspacing
-
-\usepackage{titlesec}
-\titlelabel{\thetitle.\quad}
-
-\begin{document}
-	\title{Elektroniczne systemy diagnostyki medycznej i terapii \\  Klasyfikacja pulsu - Naiwny Bayes}
-	\author{Piotr Janus, Kamil Piszczek}
-	\date{}
-	\maketitle
-
-\section{Wprowadzenie}
-\label{sec_wprowadzenie}
-
-Naiwny klasyfikator Bayesa jest prostym klasyfikatorem probabilistycznym opartym na twierdzeniu Bayesa. Nazywany jest naiwnym ze względu na przyjęte założenie, które mówi, że poszczególne cechy są wzajemnie niezależne. Pomimo tak dużego uproszczenia, klasyfikator wypada niespodziewanie dobrze w wielu rzeczywistych problemach. Dużą zaletą tego klasyfikatora jest dobra skalowalność, metoda operuje jedynie na jawnych wzorach w przeciwieństwie do innych metod wykorzystujących podejście iteracyjne.
-
-
-\section{Opis matematyczny}
-\label{sec_opis_mat}
+\section{Algorytm}
 
 \subsection{Twierdzenie Bayesa}
 \label{subsec_tw_bayesa}
@@ -95,5 +60,5 @@ Ostatecznie wzór (\ref{eq_p_ck_x}) można zapisać w postaci:
 		P(C_i | x) = \frac{P(C_i) \prod_{j = 1}^n P(x_j | C_i)}{P(x)}
 	\end{equation}
 
-	
-\end{document}
+
+

@@ -1,2 +1,5 @@
 *.pyc
-
+*.aux
+*.out
+*.gz
+*.log
