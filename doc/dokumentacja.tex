@@ -1,0 +1,99 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst}
+\usepackage{mathtools} 
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\frenchspacing
+
+\usepackage{titlesec}
+\titlelabel{\thetitle.\quad}
+
+\begin{document}
+	\title{Elektroniczne systemy diagnostyki medycznej i terapii \\  Klasyfikacja pulsu - Naiwny Bayes}
+	\author{Piotr Janus, Kamil Piszczek}
+	\date{}
+	\maketitle
+
+\section{Wprowadzenie}
+\label{sec_wprowadzenie}
+
+Naiwny klasyfikator Bayesa jest prostym klasyfikatorem probabilistycznym opartym na twierdzeniu Bayesa. Nazywany jest naiwnym ze względu na przyjęte założenie, które mówi, że poszczególne cechy są wzajemnie niezależne. Pomimo tak dużego uproszczenia, klasyfikator wypada niespodziewanie dobrze w wielu rzeczywistych problemach. Dużą zaletą tego klasyfikatora jest dobra skalowalność, metoda operuje jedynie na jawnych wzorach w przeciwieństwie do innych metod wykorzystujących podejście iteracyjne.
+
+
+\section{Opis matematyczny}
+\label{sec_opis_mat}
+
+\subsection{Twierdzenie Bayesa}
+\label{subsec_tw_bayesa}
+Twierdzenie w teorii prawdopodobieństwa określające zależność między prawdopodobieństwem warunkowym wystąpienia zdarzeń $A|B$ i $B|A$. Przyjmijmy zbiór zdarzeń $X$, w którym zdarzenia $B_i \in X$, $P(B_i)>0$ ${(i=1,2, \dots , n)}$ tworzą układ zupełny (iloczyn każdych dwóch zdarzeń jest zdarzeniem niemożliwym, natomiast suma wszystkich zdarzeń jest zdarzeniem pewnym). Wówczas dla dowolnego $A \in X$ zachodzi następująca zależność:
+
+	\begin{equation}
+	\label{eq_tw_bayesa_1}
+		P(B_i | A) = \frac{P(A | B_i) P(B_i)}{P(A)}
+	\end{equation}
+
+Wykorzystując dodatkowo wzór na prawdopodobieństwo całkowite, powyższa zależność może zostać przekształcona do następującej postaci:
+
+	\begin{equation}
+	\label{eq_tw_bayesa_2}
+		P(B_i | A) = \frac{P(A | B_i) P(B_i)}{\sum_{k=1}^{n} P(A | B_k)P(B_k)}
+	\end{equation}
+
+
+\subsection{Model probabilistyczny}
+\label{subsec_model}
+
+Zdefiniujmy k-elementowy zbiór klas $C = {\{C_1, C_2, \dots, C_k\}}$ oraz dane do klasyfikacji opisane jako wektor ${x = \{x_1, x_2, \dots, x_n\}}$ zawierający $n$ niezależnych cech. Prawdopodobieństwo przynależności do danej klasy może zostać zapisane z wykorzystaniem twierdzenia Bayesa (rozdział \ref{subsec_tw_bayesa}):
+
+	\begin{equation}
+	\label{eq_p_ck_x}
+		P(C_i | x) = \frac{P(x | C_i) P(C_i)}{P(x)}
+	\end{equation}
+
+Prawdopodobieństwo $P(x)$ występujące w mianowniku wzoru (\ref{eq_p_ck_x}) nie zależy od $C$ i jest stałe, licznik może natomiast zostać przekształcony poprzez wykorzystanie definicji prawdopodobieństwa warunkowego:
+
+	\begin{equation}
+	\label{eq_p_numerator1}
+		P(x_1, \dots , x_n | C_i)P(C_i) = P(x_1, \dots, x_n, C_i)
+	\end{equation}
+
+	\begin{equation}
+	\label{eq_p_numerator2}
+		P(x_1, \dots, x_n, C_i) = P(x_1 | x_2 , \dots , x_n, C_i)P(x_2 | x_3, \dots , x_n, 	C_i) \dots P(x_{n-1} | x_n, C_i)P(x_n | C_i)P(C_i)
+	\end{equation}
+	
+Wykorzystując przyjęte na początku założenie, że cechy ${x_1, \dots, x_n}$ są niezależne można wyprowadzić następującą zależność:
+
+	\begin{equation}
+	\label{eq_p_numerator_simp1}
+		P(x_j | x_{j+1}, \dots , x_n, C_i) = P(x_j | C_i) \quad dla \quad j = \{1, 2, \dots, n-1\}
+	\end{equation}
+
+Podstawiając (\ref{eq_p_numerator_simp1}) do równania (\ref{eq_p_numerator2}) otrzymujemy:
+	
+	\begin{equation}
+	\label{eq_p_numerator_simp2}
+		P(x_1, \dots, x_n, C_i) = P(C_i) \prod_{j = 1}^n P(x_j | C_i)
+	\end{equation}
+
+Ostatecznie wzór (\ref{eq_p_ck_x}) można zapisać w postaci:
+
+	\begin{equation}
+	\label{eq_p_ck_x_simp}
+		P(C_i | x) = \frac{P(C_i) \prod_{j = 1}^n P(x_j | C_i)}{P(x)}
+	\end{equation}
+
+	
+\end{document}
