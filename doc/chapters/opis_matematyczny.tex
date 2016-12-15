@@ -21,7 +21,7 @@ Wykorzystując dodatkowo wzór na prawdopodobieństwo całkowite, powyższa zale
 \subsection{Model probabilistyczny}
 \label{subsec_model}
 
-Zdefiniujmy k-elementowy zbiór klas $C = {\{C_1, C_2, \dots, C_k\}}$ oraz dane do klasyfikacji opisane jako wektor ${x = \{x_1, x_2, \dots, x_n\}}$ zawierający $n$ niezależnych cech. Prawdopodobieństwo przynależności do danej klasy może zostać zapisane z wykorzystaniem twierdzenia Bayesa (rozdział \ref{subsec_tw_bayesa}):
+Zdefiniujmy k-elementowy zbiór klas $C = {\{C_1, C_2, \dots, C_k\}}$ oraz dane do klasyfikacji opisane jako wektor ${x = \{x_1, x_2, \dots, x_n\}}$ zawierający $n$ niezależnych cech. Prawdopodobieństwo przynależności do danej klasy może zostać zapisane z wykorzystaniem twierdzenia Bayesa (rozdział~\ref{subsec_tw_bayesa}):
 
 	\begin{equation}
 	\label{eq_p_ck_x}
@@ -65,6 +65,8 @@ Ostatecznie wzór (\ref{eq_p_ck_x}) można zapisać w postaci:
 \subsection{Rozkłady prawdopodobieństwa}
 \label{sec_rozklady}
 
+Występujące w równaniu (\ref{eq_p_ck_x_simp}) prawdopodobieństwo, że dany obiekt należy do klasy $j$ na podstawie cechy $i$ może zostać wyznaczone na różne sposoby, w zależności od analizowanego problemu. Jak zostało napisane w rozdziale \ref{subsec_bayes_detekcja_pulsu}, w niniejszym projekcie wykorzystywany jest rozkład normalny. Warto pamiętać, że istnieje także możliwość wykorzystania innych funkcji gęstości prawdopodobieństwa. 
+
 \subsubsection{Rozkład normalny}
 \label{subsec_gauss}
 
@@ -74,6 +76,7 @@ Ostatecznie wzór (\ref{eq_p_ck_x}) można zapisać w postaci:
 	-\infty < x < \infty, \; -\infty < \mu_{ij} < \infty, \; \sigma_{ij}  > 0
 	\end{equation}
 
+\noindent Gdzie: $\mu_{ij}$ -- średnia, $\sigma_{ij}$ -- odchylenie standardowe
 
 \subsubsection{Rozkład lognormalny}
 \label{subsec_lognorm}
@@ -84,6 +87,7 @@ Ostatecznie wzór (\ref{eq_p_ck_x}) można zapisać w postaci:
 	0 < x < \infty, \; m_{ij} > 0, \; \sigma_{ij}  > 0
 	\end{equation}
 
+\noindent Gdzie: $m_{ij}$ -- parametr skali, $\sigma_{ij}$ -- parametr kształtu
 
 \subsubsection{Rozkład Gamma}
 \label{subsec_gamma}
@@ -93,6 +97,8 @@ Ostatecznie wzór (\ref{eq_p_ck_x}) można zapisać w postaci:
 	p(x_i | C_j) = \frac{(x/b_{ij})^{c_{ij}-1}}{b_{ij} \Gamma(c_{ij})} \exp \bigg( \frac{-x}{b_{ij}} \bigg), \quad
 	0 \leq x < \infty, \; b_{ij} > 0, \; c_{ij}  > 0
 	\end{equation}
+
+\noindent Gdzie: $b_{ij}$ -- parametr skali, $c_{ij}$ -- parametr kształtu
 	
 \subsubsection{Rozkład Poissona}
 \label{subsec_gamma}
@@ -102,3 +108,5 @@ Ostatecznie wzór (\ref{eq_p_ck_x}) można zapisać w postaci:
 	p(x_i | C_j) = \frac{\lambda_{ij}^x \exp \big( -\lambda_{ij} \big)}{x!}, \quad
 	0 \leq x < \infty, \; \lambda_{ij} > 0, \: x=0,1,2, \dots
 	\end{equation}
+
+\noindent Gdzie: $\lambda_{ij}$ -- średnia
