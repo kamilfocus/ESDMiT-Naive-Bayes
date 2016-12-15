@@ -11,7 +11,7 @@ Idee metody Naiwnego Bayesa można łatwo wyjaśnić na prostym przykładzie, pr
     \includegraphics[scale = 1]
     {img/bayes_przyklad.png}
   \end{center}
-  \caption{Prosty przykład - zbiór punktów (źródło \ref{})}
+  \caption{Prosty przykład -- zbiór punktów (źródło \cite{bibPodrecznik})}
   \label{fig_bayes_przyklad}
 \end{figure}
 
@@ -27,17 +27,17 @@ Wszystkich obiektów jest 60 w czym 40 zielonych i 20 czerwonych. Prawdopodobie�
     \includegraphics[scale = 1]
     {img/bayes_przyklad_2.png}
   \end{center}
-  \caption{Prosty przykład - sąsiedztwo (źródło \ref{})}
+  \caption{Prosty przykład -- sąsiedztwo (źródło \cite{bibPodrecznik})}
   \label{fig_bayes_przyklad2}
 \end{figure}
 
-Mając dane prawdopodobieństwo \textit{a priori} oraz szansę, możemy przystąpić do ostatniego etapu klasyfikacji. Końcowe prawdopodobieństwo czy nowy obiekt należy do danej klasy (jest danego koloru) obliczane jest jako iloczyn dwóch wyznaczonych wcześniej prawdopodobieństw. Zostaje on oczywiście przypisany do klasy o większym prawdopodobieństwie.
+Mając dane prawdopodobieństwo \textit{a priori} oraz szansę, możemy przystąpić do ostatniego etapu klasyfikacji. Końcowe prawdopodobieństwo czy nowy obiekt należy do danej klasy (jest danego koloru) obliczane jest jako iloczyn dwóch wyznaczonych wcześniej prawdopodobieństw. Obiekt zostaje oczywiście przypisany do klasy o większym prawdopodobieństwie.
 
 
 \subsection{Wykorzystanie w detekcji pulsu}
 \label{subsec_bayes_detekcja_pulsu}
 
-Omówiony w poprzednich punktach przykład, był bardzo uproszczony i miał na celu jedynie pokazać idee klasyfikatora. Klasyfikacja zespołu QRS jest problemem wielowymiarowym (dokładnie 18 wymiarowym, gdyż jest to rozmiar wektora cech). W takim przypadku nieco inaczej oblicza ''szansa''. Obliczane jest osobno prawdopodobieństwo przynależności do danej klasy na podstawie każdego elementu z wektora cech. Ostatecznie pod uwagę brany jest iloczyn wszystkich prawdopodobieństw.
+Omówiony w poprzednich punktach przykład, był bardzo uproszczony i miał na celu jedynie pokazać idee klasyfikatora. Klasyfikacja zespołu QRS jest problemem wielowymiarowym (dokładnie 18 wymiarowym, gdyż taka jest długość wektora cech). W takim przypadku nieco inaczej oblicza ''szansa''. Osobno wyznaczane jest prawdopodobieństwo przynależności do danej klasy na podstawie każdego elementu z wektora cech. Ostatecznie pod uwagę brany jest iloczyn wszystkich prawdopodobieństw.
 
 Kolejnym zagadnieniem jest sposób obliczania prawdopodobieństwa na podstawie cechy. W przypadku niniejszego projektu wykorzystywany jest w tym celu rozkład normalny (rozdział \ref{sec_rozklady}). Dla każdej klasy, poszczególne cechy mają przypisaną wartość średnią i odchylenie standardowe. Są one obliczane na podstawie zbioru uczącego w trakcie procesu uczenia.
 
@@ -46,8 +46,8 @@ Kolejnym zagadnieniem jest sposób obliczania prawdopodobieństwa na podstawie c
 
 Metoda Naiwnego Bayesa należy do grupy algorytmów nadzorowanego uczenia maszynowego (z nauczycielem). Dane, które podlegają klasyfikacji za pomocą tej metody należy podzielić na dwa zbiory: uczący oraz testowy. Pierwszy z nich wykorzystywany jest w procesie uczenia klasyfikatora. Drugi weryfikuje, czy nauczony klasyfikator ma zdolność generalizacji, a także sprawdza efektywną skuteczność klasyfikacji. Warto zaznaczyć, że algorytmy nadzorowanego uczenia maszynowego mogą stracić zdolność do generalizacji w wyniku zjawiska overfittingu. Następuje ono wtedy, gdy algorytm nadmiernie dostosowuję się do zbioru uczącego - tzn. błąd zbioru uczącego maleje, a błąd zbioru testowego zaczyna rosnąć.
 
-Istnieje wiele sposobów podziału danych na zbiór uczący i testowy. Generalnie metody te nazywane są sprawdzianem krzyżowym. Poniżej opisane zostały najbardziej znane metody.
+Istnieje wiele sposobów podziału danych na zbiór uczący i testowy. Generalnie metody te nazywane są sprawdzianem krzyżowym \cite{bibSprKrzyzowy}. Poniżej opisane zostały najbardziej znane metody.
 
 Pierwszy ze sposobów to metoda Prostej Walidacji. Jest ona obecnie używana w niniejszym projekcie. Metoda ta  polega na losowym podziale danych na dwa rozłączne zbiory: uczący i testowy. W tym wariancie zbiór testowy  stanowi co najwyżej 1/3 całkowitej próbki danych. Dodatkowo, zastosowana implementacja gwarantuje, że proporcje  ilościowe klas w obu zbiorach będą takie same jak w początkowym zbiorze (przed podziałem).
 
-Drugi ze sposobów to K-krotna Walidacja. W tym wariancie dane dzielone są na K różnych podzbiorów. Następnie kolejno każdy z nich bierze się jako zbiór testowy, a pozostałe podzbiory stanowią zbiór uczący. Cały proces powtarzany jest K razy. Otrzymane rezultaty łączone są w jeden za pomocą wybranego sposobu. Najczęściej są one po prostu uśredniane.
+Drugi ze sposobów to K-krotna Walidacja. W tym wariancie dane dzielone są na K różnych podzbiorów. Następnie kolejno każdy z nich bierze się jako zbiór testowy, a pozostałe podzbiory stanowią zbiór uczący. Cały proces powtarzany jest K razy. Otrzymane rezultaty łączone są w~jeden za pomocą wybranego sposobu. Najczęściej są one po prostu uśredniane.
