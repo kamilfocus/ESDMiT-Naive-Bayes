@@ -4,7 +4,7 @@ CC = g++
 # compiler flags:
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
-CFLAGS  = -g -Wall
+CFLAGS  = -std=c++11 -O0 -g3 -Wall
 
 INCLUDES = -I../.
 
