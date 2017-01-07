@@ -9,7 +9,7 @@ CFLAGS  = -std=c++11 -O0 -g3 -Wall
 INCLUDES = -I../.
 
 # the build target executable:
-TARGET = main
+TARGET = bayes
 
 all: $(TARGET)
 

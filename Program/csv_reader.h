@@ -28,13 +28,12 @@ class CSVRow
         {
             std::string         line;
             std::getline(str, line);
+            line.erase(0, line.find_first_not_of(' '));
 
             std::stringstream   lineStream(line);
             std::string         cell;
 
-            // Clear data and get initial space in the row.
             m_data.clear();
-            std::getline(lineStream, cell, ' ');
 
             double qrs_cell;
             while(std::getline(lineStream, cell, ' '))
