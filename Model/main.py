@@ -10,6 +10,8 @@ data_input_path  = '../ReferencyjneDane/101/ConvertedQRSRawData.txt'
 class_input_path = '../ReferencyjneDane/101/Class_IDs.txt'
 log_file         = 'bayes_logger.txt'
 
+fields2skip = []
+
 def logger_setup(log_level = logging.INFO, log_to_file = False):
     FORMAT = "%(filename)s: %(message)s"
     logging.basicConfig(format=FORMAT, level=log_level)
@@ -38,6 +40,11 @@ def raw_csv_data_load(data_input_path, class_input_path, fieldnames=None):
                 if len(class_id) != 1:
                     msg = 'Class ID should contain one element: len(class_id) != %d'
                     raise StandardError(msg % len(class_id))
+                
+                if fields2skip:
+                    for field_name in fields2skip:
+                        del data[field_name]
+                
                 qrs_record = QrsData(int(class_id[0]), data)
                 res.append(qrs_record)
     return res
@@ -47,7 +54,7 @@ def named_csv_data_load(data_input_path, class_input_path):
                   'p_onset', 'p_onset_val', 'p_peak', 'p_peak_val', 'p_end', \
                   'p_end_val', 'qrs_onset', 'qrs_onset_val', 'qrs_end', 'qrs_end_val', \
                   't_peak', 't_peak_val', 't_end', 't_end_val']
-    QrsData.fields_set(fieldnames)
+    QrsData.fields_set([item for item in fieldnames if item not in fields2skip])
     return raw_csv_data_load(data_input_path, class_input_path, fieldnames)
 
 def qrs_data_log(qrs_data, class_id):

@@ -2,5 +2,6 @@
 *.cproject
 *.project
 /Default/
+/.settings/
 
 *.dump
