@@ -5,6 +5,7 @@
 #include <string>
 #include "qrs_data.h"
 
+
 class CSVRow
 {
     public:
@@ -35,18 +36,29 @@ class CSVRow
 
             m_data.clear();
 
+            uint32_t cnt = 0;
             double qrs_cell;
+
             while(std::getline(lineStream, cell, ' '))
             {
                 std::istringstream(cell) >> qrs_cell;
+                if (0 == (features_mask & (1<<cnt++)))
+                	continue;
+
                 m_data.push_back(qrs_cell);
             }
         }
 
+        static void set_features_mask(uint32_t fm){
+        	features_mask = fm;
+        }
+
     private:
+        static uint32_t features_mask;
         std::vector<double>    m_data;
 };
 
+uint32_t CSVRow::features_mask = 0;
 
 std::istream& operator>>(std::istream& str, CSVRow& data)
 {
@@ -61,6 +73,7 @@ std::list<Qrs> csv_read(std::string data_input_path, std::string class_input_pat
     std::ifstream       class_data_file(class_input_path);
     std::string         class_id_line;
     CSVRow              row;
+
     while(qrs_data_file >> row && class_data_file >> class_id_line)
     {
         size_t class_id;

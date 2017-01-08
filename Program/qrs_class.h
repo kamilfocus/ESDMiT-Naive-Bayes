@@ -76,6 +76,7 @@ class QrsClass
         std::string to_dump(){
             std::ostringstream oss;
             oss << class_id << " " << samples << std::endl;
+
             for(int i = 0; i < mean.size(); i++)
             {
                 oss << mean[i] << " ";
@@ -89,25 +90,23 @@ class QrsClass
             return oss.str();
         }
 
-        void from_dump(std::ifstream & qrs_class_file){
+        bool from_dump(std::ifstream & qrs_class_file){
             this->active   = true;
             qrs_class_file >> (this->class_id);
             qrs_class_file >> (this->samples);
 
-            double              x;
+            if (qrs_class_file.eof())
+            	return false;
+
             std::vector<double> input;
-            for(int i = 0; i < COL_NUM; ++i){
-                qrs_class_file >> x;
-                input.push_back(x);
-            }
+
+            get_vector_from_dump(qrs_class_file, input);
             mean = VectorXd::Map(input.data(), input.size());
             input.clear();
 
-            for(int i = 0; i < COL_NUM; ++i){
-                qrs_class_file >> x;
-                input.push_back(x);
-            }
+            get_vector_from_dump(qrs_class_file, input);
             var_sum = VectorXd::Map(input.data(), input.size());
+            return true;
         }
 
     private:
@@ -117,6 +116,24 @@ class QrsClass
 
         VectorXd mean;
         VectorXd var_sum;
+
+        void get_vector_from_dump(std::ifstream & qrs_class_file, std::vector<double> & input){
+        	double x;
+
+        	if (qrs_class_file.peek() == '\n')
+        		(void)qrs_class_file.get();
+
+            while (qrs_class_file.peek() != '\n'){
+            	if (qrs_class_file.peek() == ' '){
+            		(void)qrs_class_file.get();
+            		continue;
+            	}
+                qrs_class_file >> x;
+                input.push_back(x);
+            }
+            (void)qrs_class_file.get();
+        }
+
 
         VectorXd gaussian_pdf(Qrs & qrs){
             VectorXd std_dev, amp, power;

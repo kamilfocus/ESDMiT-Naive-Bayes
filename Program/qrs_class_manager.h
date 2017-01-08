@@ -11,8 +11,10 @@ class QrsClassManager
 {
 
     public:
-        QrsClassManager(bool reset)
+        QrsClassManager(bool reset, uint32_t fmask)
         {
+        	this->fmask = fmask;
+
             if (reset){
                 remove(bayes_dump.c_str());
             }
@@ -21,6 +23,8 @@ class QrsClassManager
             if(qrs_class_file.good()){
                 from_dump(qrs_class_file);
             }
+            qrs_class_file.close();
+
         }
 
         ~QrsClassManager(void)
@@ -85,6 +89,9 @@ class QrsClassManager
         std::string to_dump(){
             std::ostringstream oss;
 
+            oss << std::hex << fmask << std::endl;
+            oss << std::dec;
+
             std::map<size_t, QrsClass>::iterator  class_data_it;
             for (class_data_it = class_data.begin(); class_data_it != class_data.end(); ++class_data_it)
             {
@@ -95,17 +102,27 @@ class QrsClassManager
         }
 
         void from_dump(std::ifstream & qrs_class_file){
+        	if (!qrs_class_file.eof())
+        	{
+        		uint32_t prev_fmask;
+        		qrs_class_file >> std::hex >> prev_fmask;
+        		qrs_class_file >> std::dec;
+        		if (prev_fmask != fmask)
+        			return;
+        	}
+
             while(!qrs_class_file.eof()){
                 QrsClass new_qrs_class(0);
-                new_qrs_class.from_dump(qrs_class_file);
-                if(qrs_class_file.eof()){
+
+                if(!new_qrs_class.from_dump(qrs_class_file))
                     break;
-                }
+
                 class_data.insert( std::make_pair(new_qrs_class.get_class_id(), new_qrs_class) );
             }
         }
 
     private:
+        uint32_t fmask;
         std::map<size_t, QrsClass> class_data;
 };
 

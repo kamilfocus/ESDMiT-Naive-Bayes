@@ -23,8 +23,10 @@ using Eigen::MatrixXd;
 #include "split.h"
 #include "qrs_class_manager.h"
 
+
 std::string data_input_path  = "../ReferencyjneDane/101/ConvertedQRSRawData.txt";
 std::string class_input_path = "../ReferencyjneDane/101/Class_IDs.txt";
+
 
 std::string results_summary(size_t correct, size_t size){
     std::ostringstream oss;
@@ -58,10 +60,19 @@ int main(int argc, char** argv) {
     SwitchArg time_switch("m","measure","Measure execution time", false);
     cmd.add(time_switch);
 
+    ValueArg<std::string> features_mask("f","features_mask",
+    		"Define which features are considered in classification process (the least significant bit corresponds to the first feature",
+			false, "0x3ffff", "double in hex format");
+    cmd.add(features_mask);
+
     MultiArg<std::string> data_source("d","data","Paths to the datasets (Qrs data and Class IDs)", false, "string");
     cmd.add(data_source);
 
     cmd.parse(argc, argv);
+
+    uint32_t fmask;
+    std::istringstream(features_mask.getValue()) >> std::hex >> fmask;
+    CSVRow::set_features_mask(fmask);
 
     std::vector<std::string> data_paths = data_source.getValue();
     if (data_source.isSet()){
@@ -85,7 +96,7 @@ int main(int argc, char** argv) {
     std::list<Qrs> qrs_list = csv_read(data_input_path, class_input_path);
     LOG("*** Data has been successfully loaded.\n");
 
-    QrsClassManager qrs_class_manager(reset_switch.getValue());
+    QrsClassManager qrs_class_manager(reset_switch.getValue(), fmask);
     if (!test_switch.getValue()){
 
         std::map<size_t, std::list<Qrs>> training_data;
@@ -100,6 +111,8 @@ int main(int argc, char** argv) {
 
         LOG("*** Learning has started...\n");
         qrs_class_manager.learn(training_data);
+        LOG("*** Learning has finished successfully.\n");
+
     }
 
     if(verbose_switch.getValue()){
