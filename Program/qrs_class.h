@@ -123,7 +123,8 @@ class QrsClass
 
             std_dev = get_std_dev();
 
-            amp          = VectorXd::Constant(1.0/(sqrt(2.0*M_PI)), mean.size());
+            amp = VectorXd::Ones(mean.size());
+            amp /= sqrt(2.0*M_PI);
             amp.array() /= std_dev.array();
 
             power = qrs.get_data() - mean;
