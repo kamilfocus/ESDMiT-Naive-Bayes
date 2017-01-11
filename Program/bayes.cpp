@@ -28,13 +28,15 @@ std::string data_input_path  = "../ReferencyjneDane/101/ConvertedQRSRawData.txt"
 std::string class_input_path = "../ReferencyjneDane/101/Class_IDs.txt";
 
 
-std::string results_summary(size_t correct, size_t size){
+std::string results_summary(TestResult_t result, size_t size){
     std::ostringstream oss;
 
     oss << "*** Prediction Test Summary:\n";
     oss << "    Test set length: " << size << std::endl;
-    oss << "    Number of correct classifications: " << correct << std::endl;
-    oss << "    Classification accuracy: " << (correct / (double) size) * 100 << "%\n";
+    oss << "    Number of correct classifications: " << result.correct_answers << std::endl;
+    oss << "    Classification accuracy: " << (result.correct_answers / (double) size) * 100 << "%\n";
+    oss << "    Sensitivity: " << (double)result.tp/(result.tp + result.fn)*100 << "%\n";
+    oss << "    Specificity: " << (double)result.tn/(result.tn + result.fp)*100 << "%\n";
 
     return oss.str();
 }
@@ -121,9 +123,10 @@ int main(int argc, char** argv) {
     }
 
     if (!learn_switch.getValue()){
+    	TestResult_t result;
         std::list<Qrs> & test_set = qrs_list;
-        size_t correct_answers    = qrs_class_manager.test(test_set);
-        LOG(results_summary(correct_answers, test_set.size()));
+        qrs_class_manager.test(test_set, result);
+        LOG(results_summary(result, test_set.size()));
     }
 
     if (time_switch.getValue()){

@@ -5,7 +5,17 @@
 #include <fstream>
 #include "qrs_class.h"
 
+#define HEALTHY_CLASS 		1
+
 static const std::string bayes_dump = "bayes.dump";
+
+typedef struct TestResult {
+	size_t correct_answers;
+	size_t tp;
+	size_t tn;
+	size_t fp;
+	size_t fn;
+} TestResult_t;
 
 class QrsClassManager
 {
@@ -49,9 +59,15 @@ class QrsClassManager
             }
         }
 
-        size_t test(std::list<Qrs> & test_data){
-            size_t correct_answers = 0;
+        void test(std::list<Qrs> & test_data, TestResult_t & result){
 
+        	result.correct_answers = 0;
+        	result.tp = 0;
+        	result.tn = 0;
+        	result.fp = 0;
+        	result.fn = 0;
+
+        	size_t class_id;
             std::list<Qrs>::iterator test_data_it;
             for (test_data_it = test_data.begin(); test_data_it != test_data.end(); ++test_data_it){
                 double     best_probability;
@@ -68,10 +84,21 @@ class QrsClassManager
                     }
                 }
 
-                if( (*test_data_it).get_class_id() == (*best_qrs_class).get_class_id() )
-                    correct_answers++;
+                class_id = (*test_data_it).get_class_id();
+                if (class_id == (*best_qrs_class).get_class_id() ){
+                	result.correct_answers++;
+                	if (class_id == HEALTHY_CLASS)
+                		result.tp++;
+                	else
+                		result.tn++;
+                }
+                else{
+                	if (class_id == HEALTHY_CLASS)
+                		result.fn++;
+                	else
+                		result.fp++;
+                }
             }
-            return correct_answers;
         }
 
         std::string to_string(){
