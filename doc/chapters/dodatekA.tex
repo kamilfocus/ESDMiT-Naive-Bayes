@@ -1,10 +1,33 @@
 \section{Dodatek A: Instrukcja uruchomienia programów}
 \label{dodatekA}
 
-Repozytorium z projektem dostępne jest pod linkiem: \href{https://github.com/kamilfocus/ESDMiT-Naive-Bayes}{Klasyfikacja pulsu - Naiwny Bayes}. Model programowy algorytmu został napisany przy pomocy Pythona. Do skonfigurowania środowiska uruchomieniowego dla projektu służą poniższe instrukcje:
+Repozytorium z projektem dostępne jest pod linkiem: \href{https://github.com/kamilfocus/ESDMiT-Naive-Bayes}{Klasyfikacja pulsu - Naiwny Bayes}. 
+
+\subsection{Prototyp}
+Model programowy algorytmu został napisany przy pomocy Pythona. Do skonfigurowania środowiska uruchomieniowego dla projektu służą poniższe instrukcje:
 
 \begin{enumerate}
 	\item Kod programu jest kompatybilny z interpreterem języka Python w wersji 2.7.x i znajduje się w folderze \texttt{Model}.
 	\item Aby włączyć program, należy uruchomić skrypt \texttt{main.py}.
 	\item Wynik działania programu jest przekierowany na standardowe wyjście oraz zapisany do pliku \texttt{bayes\_logger.txt}.
 \end{enumerate}
+
+W pliku \texttt{main.py} można edytować zmienne globalne \texttt{data\_input\_path} i \texttt{class\_input\_path} w celu określenia ścieżek do danych wejściowych. Wymagane jest określenie dwóch plików: zawierającego zbiór zespołów QRS oraz drugiego określającego przynależność do odpowiedniej klasy.
+
+Dodatkowo można także zdefiniować listę cech które zostaną pominięte przez algorytm (zmienna globalna \textit{fields2skip}). Na podstawie rozdziału \ref{sec_wstep} zdefiniowane zostały następujące cechy:\\
+\textit{r\_peak, r\_peak\_value, rr\_pre\_interval, rr\_post\_interval, 
+p\_onset, p\_onset\_val, p\_peak, p\_peak\_val, p\_end, p\_end\_val, 
+qrs\_onset, qrs\_onset\_val, qrs\_end, qrs\_end\_val, t\_peak, t\_peak\_val, 
+t\_end, \\t\_end\_val}.
+
+\subsection{Program w C++}
+
+Program uruchamiany jest przez wiersz poleceń, kod źródłowy znajduje się w katalogu \texttt{Program}. Wszystkie dodatkowe biblioteki umieszczone są w folderze projektowym, nie ma konieczności dołączania zewnętrznych bibliotek. Do kompilacji wykorzystywany jest plik \texttt{Makefile}, generujący plik wykonywalny \texttt{bayes.exe}.
+
+Tak jak w przypadku prototypu konieczne jest określenie dwóch plików, ścieżki mogą zostać podane jako argumenty w wierszu poleceń. W tym celu należy wykorzystać flagę \textit{--d} w~następujący sposób: \textit{--d $<$ścieżka do qrs\_data$>$ --d $<$ścieżka do class\_id$>$}. W przypadku niezdefiniowania ścieżek zostanie wykorzystane domyślne wejście.
+
+Wykorzystując flagę \textit{--f} można zdefiniować maskę binarną aktywującą poszczególne cechy. Maska podawana jest w postaci heksadecymalnej z przedrostkiem \textit{0x}. Najmłodszy bit odpowiada pierwszej cesze z listy (lista jest oczywiście taka sama jak w przypadku prototypu), przykładowo maska: \textit{--f $0x0040c$} powoduje, że algorytm bierze pod uwagę jedynie: \textit{rr\_pre\_interval, rr\_post\_interval, qrs\_onset}.
+
+Kolejność podawania flag przy uruchomieniu programu jest dowolna, ich dokładny opis został zamieszczony w rozdziale \ref{subsec_implementacja_cpp}. Przykładowe wywołanie programu:\\ 
+\texttt{bayes --d ../ReferencyjneDane/101/ConvertedQRSRawData.txt --d ../ReferencyjneD\\ane/101/Class\_IDs.txt --r --l --f $0x3fffe$}\\ 
+Instrukcja ta powoduje usunięcie modelu prawdopodobieństwa zapisanego w pliku (jeżeli istnieje) i wygenerowanie nowego (bez przeprowadzenia testów z powodu flagi \textit{--l}). Zgodnie ze zdefiniowaną maską, algorytm uwzględni wszystkie cechy oprócz pierwszej (\textit{r\_peak}). 

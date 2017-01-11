@@ -1,0 +1,46 @@
+\section{Implementacja}
+\label{sec_implementacja}
+
+\subsection{Prototyp}
+\label{subsec_prototyp}
+
+Prototyp algorytmu został zaimplementowany w \textit{Pythonie}. Ta implementacja miała na celu dostosowanie opisu matematycznego zamieszczonego w rozdziale \ref{sec_opis_mat} do problemu klasyfikacji pulsu i wstępne zweryfikowanie poprawności metody oraz oszacowanie dokładności przed przejściem do właściwej implementacji w \textit{C++}.
+
+Z racji tego, że prototyp posłużył jedynie do wstępnej weryfikacji metody, jego funkcjonalność została także ograniczona w stosunku do końcowej implementacji. Zasada działania programu jest bardzo prosta, podany zbiór wejściowy rozdzielany jest na uczący i testowy w sposób losowy. Zbiór uczący stanowi 70\% zbioru wejściowego, pozostałe 30\% wykorzystywane jest jako zbiór testowy. Po załadowaniu danych, program przeprowadza proces generacji modelu prawdopodobieństwa (inaczej proces uczenia), a następnie uruchamia procedurę testową i zwraca dokładność metody.
+
+Dodatkowo została dodana możliwość wyłączenia z modelu prawdopodobieństwa niektórych cech opisujących \textit{QRS}. Może się okazać, że nie wszystkie z 18 cech przedstawionych w rozdziale \ref{sec_wstep} mają wpływ na klasyfikację z wykorzystaniem metody Naiwnego Bayesa. Takie podejście pozwoliło przetestować wiele przypadków. Dokładny opis i zestawienie przeprowadzonych testów zostało przedstawione w rozdziale \ref{sec_testy}, natomiast szczegółową instrukcję do programu umieszczono w rozdziale \ref{dodatekA}.
+
+\subsection{Implementacja w C++}
+\label{subsec_implementacja_cpp}
+
+\subsubsection{Opis}
+Model w \textit{C++} zapewnia kilka dodatkowych funkcji w stosunku do prototypu zaimplementowanego w \textit{Pythonie}. Sam algorytm został dokładnie odwzorowany bez stosowania żadnych uproszczeń, dodana funkcjonalność ma na celu jedynie uprościć proces weryfikacji i testowania metody. 
+
+Najważniejszą funkcją jest możliwość zapisu do pliku efektów uczenia(wygenerowanego modelu probabilistycznego) i odtworzenia ich przy następnym uruchomieniu programu. Dzięki temu możemy ręcznie rozdzielić zbiór danych na uczący i testowy, przy jednym uruchomieniu programu przeprowadzić jedynie proces uczenia, a w następnym same testy na innym zbiorze. Dodatkowo istnieje także możliwość douczania przy pomocy kolejnych zbiorów. Przypomnijmy, że w~przypadku implementacji w \textit{Pythonie} można wskazać jedynie jeden zbiór, który następnie jest losowo rozdzielany na uczący i testowy w odpowiednich proporcjach.
+
+\subsubsection{Dodatkowe funkcje}
+
+Jak zostało wspomniane implementacja w \textit{C++} posiada kilka dodatkowych funkcji w stosunku do prototypu napisanego w \textit{Pythonie}. Mogą one zostać aktywowane poprzez ustawienie odpowiednich flag:
+\begin{itemize}
+\item{-r -- resetuje efekty uczenia zapisane w pliku}
+\item{-v -- rozszerzone logowanie, wyświetla dodatkowo efekty uczenia w postaci wartości średniej i odchylenia standardowego każdej cechy oraz liczbę próbek wykorzystanych do nauczenia danej klasy.}
+\item{-l -- wykonywany jest jedynie proces uczenia/douczenia z wykorzystaniem podanego zbioru wejściowego}
+\item{-t -- wykonywane są jedynie testy z wykorzystaniem podanego zbioru wejściowego, model probabilistyczny musi zostać wygenerowany wcześniej z użyciem flagi \textit{--l} i jest odczytywany z pliku} 
+\item{-m -- mierzy i wyświetla czas wykonania programu}
+\end{itemize}
+
+Jedyna zabroniona kombinacja to użycie jednocześnie flag \textit{--l} i \textit{--t}. W celu uzyskania efektu jak w wersji prototypowej, czyli losowe rozdzielnie zbioru na testowy i uczący należy pominąć obie flagi. Dokładny opis korzystania programu został zamieszczony w rozdziale \ref{dodatekA}
+
+\subsubsection{Wykorzystane biblioteki}
+W celu polepszenia wydajności implementacji. poprawienie funkcjonalności i uproszczenia kodu źródłowego wykorzystano opensourcowe biblioteki. Z racji niewielkich rozmiarów zostały one dołączone do folderu projektowego, takie rozwiązanie ułatwia kompilację i przenoszenie projektu.
+
+Przy implementacji algorytmu zastosowana została bilbioteka \textit{Eigen}\cite{eigen}. Z jej wykorzystaniem można zoptymalizować operacje matematyczne wykonywane na dużych wektorach danych. W omawianym przypadku zbiór danych wejściowych zawierał do 30 tysięcy rekordów, zastosowanie zoptymalizowanej biblioteki pozwoliło znacząco podnieść wydajność programu a także uprościć implementację.
+
+W celu implementacji obsługi dodatkowych funkcji z poziomu wiersza poleceń wykorzystano bibliotekę \textit{Tclap} \cite{tclap}. Udostępnia ona prosty interfejs do obsługi argumentów z wiersza poleceń. Jej zaletą jest implementacja jedynie z wykorzystaniem plików nagłówkowych, dzięki czemu jest łatwa w użyciu i integracji z różnymi projektami.
+
+\subsection{Dodatkowe narzędzia}
+\label{subsec_narzedzia}
+
+
+\subsection{Porównanie}
+\label{subsec_porownanie}

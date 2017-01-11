@@ -3,5 +3,5 @@
 *.project
 /Default/
 /.settings/
-
+/data/
 *.dump
