@@ -5,6 +5,11 @@ class NaiveBayesPredictor(object):
 
     def __init__(self, test_set, seperated_classes):
         self.correct = 0
+        self.tp = 0
+        self.tn = 0
+        self.fp = 0
+        self.fn = 0
+        
         self.test_set_len = len(test_set)
         self.descriptors = seperated_classes.class_descriptors
         
@@ -12,6 +17,15 @@ class NaiveBayesPredictor(object):
             prediction = self.__make_prediction(input.tolist())
             if prediction == input.class_id:
                 self.correct += 1
+                if input.class_id == 1:
+                    self.tp += 1
+                else:
+                    self.tn += 1
+            else:
+                if input.class_id == 1:
+                    self.fn += 1
+                else:
+                    self.fp += 1
 
     def __calculate_class_probability(self, input, descriptor):
         probability = 1
@@ -41,4 +55,6 @@ class NaiveBayesPredictor(object):
         output_str += str('Test set length: %d\n' % self.test_set_len)
         output_str += str('Number of correct classifications: %d\n' % self.correct)
         output_str += str('Classification accuracy: %f\n' % self.get_accuracy())
+        output_str += str('Sensitivity: %f%%\n' % (float(self.tp)/(self.tp + self.fn)*100))
+        output_str += str('Specificity: %f%%\n' % (float(self.tn)/(self.tn + self.fp)*100)) 
         return output_str
