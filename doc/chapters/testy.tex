@@ -1,6 +1,28 @@
 \section{Testy i wnioski}
 \label{sec_testy}
 
+\subsection{Dane testowe i metodologia}
+Do testów zaimplementowanej metody wykorzystano dane referencyjne zamieszczone w repozytorium \cite{ref_data_repo}. Wspomniany zbiór zawiera 38 zestawów danych wejściowych o różnych długościach i złożoności (ilości obecnych klas). Użyto danych zamieszczonych w katalogu \\ \texttt{data\_unique\_labels}, zostały one tak przygotowane, że w każdym z nich klasa oznaczająca zdrową osobę ma to samo id, takie podejście zdecydowanie ułatwia procedurę testowania. Dodatkowo każdy ze zbiorów został rozdzielony na uczący (70\%) i testowy(30\%). 
+
+Po przeprowadzeniu szczegółowej analizy z wykorzystaniem dodatkowych skryptów i narzędzi opisanych w rozdziale \ref{subsec_narzedzia} zdecydowano się przeprowadzić testy algorytmu wykorzystującego wszystkie dostępne cech zespołu \textit{QRS}, ponieważ właśnie taka konfiguracja zapewnia najlepsze wyniki.
+
+W celu sprawdzenia dokładności przygotowanej metody wykorzystano następujące wskaźniki wskaźniki:
+
+\begin{enumerate}
+\item \textit{skuteczność} definiowana jako procent poprawnie rozpoznanych klas
+\item \textit{czułość} -- stosunek wyników prawidłowo rozpoznanych jako pozytywnych (prawdziwie dodatnich) do sumy wyników prawdziwie dodatnich i błędnie rozpoznanych jak fałszywe (fałszywie ujemnych), w naszym przypadku przez wynik pozytywnie dodani rozumiane jest poprawne rozpoznanie osoby zdrowej, natomiast negatywnie ujemny to zakwalifikowanie osobny zdrowej do grypy chorych
+
+\item \textit{swoistość} -- stosunek wyników prawidłowo rozpoznanych jako negatywne (pozytywnie ujemnych) do sumy wyników pozytywnie ujemnych i błędnie rozpoznanych jako pozytywne (fałszywie dodatnich), w naszym przypadku przez wynik pozytywnie ujemny rozumiane jest poprawne rozpoznanie osoby chorej, natomiast negatywnie dodatni to zakwalifikowanie osobny chorej do grypy zdrowych
+\end{enumerate} 
+
+\noindent Zarówno \textit{czułość} i \textit{swoistość} są wskaźnikami binarnymi, ponieważ w analizowanych zbiorach klasa 1 zawsze oznacza osobę zdrową przyjęto założenie, że klasyfikacja do jakiejkolwiek innej klasy oznacza osobę chorą.
+
+\subsection{Wyniki}
+Przed przystąpieniem do analizy dokładności algorytmu przeprowadzono porównanie wydajności obu implementacji. Czas wykonania obu wersji dla poszczególnych zbiorów testowych zamieszczono w tabeli \ref{tab:czasy}. Zgodnie z oczekiwaniami implementacja w \textit{C++} w każdym przypadku jest szybsza od prototypu. W zależności od testowanego zbioru czas wykonania jest nawet do trzech razy szybszy.
+
+Drugim etapem była analiza dokładności algorytmu, szczegółowe wyniki dla poszczególnych zbiorów zostały zamieszczone w tabeli \ref{tab:skutecznosc}.
+W przypadku niektórych testów w kolumnach \textit{swoistość} i \textit{czułość} można zauważyć wartości \texttt{NaN}, oznacza to że podczas obliczania danego wskaźnika wystąpiło dzielenie przez zero. Taka sytuacja może wystąpić w przypadku gdy w danych zbiorze nie ma w ogóle osób chorych, wtedy nie odnotowujemy żadnego przypadku pozytywnie ujemnego ani fałszywie dodatniego przez co podczas obliczania swoistość dzielimy przez 0.  Analogicznie sytuacja może pojawić się podczas obliczania czułości gdy zbiór zawiera jedynie zdrowe osoby.
+
 \begin{table}
 	\centering
 	\begin{tabular}{|c|r|r|r|r|}
