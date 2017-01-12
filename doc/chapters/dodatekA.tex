@@ -10,7 +10,7 @@ Repozytorium z projektem dostępne jest pod linkiem: \href{https://github.com/ka
 Program uruchamiany jest przez wiersz poleceń, kod źródłowy znajduje się w katalogu \texttt{Program}. Wszystkie dodatkowe biblioteki umieszczone są w folderze projektowym, nie ma konieczności dołączania zewnętrznych bibliotek. Do kompilacji wykorzystywany jest plik \texttt{Makefile}, generujący plik wykonywalny \texttt{bayes.exe}. Program po każdym uruchomieniu generuje tymczasowy plik \texttt{bayes.dump} z ostatnim zapamiętanym modelem prawdopodobieństwa. 
 
 \subsubsection{Dane wejściowe}
-Tak jak w przypadku prototypu konieczne jest określenie dwóch plików, ścieżki mogą zostać podane jako argumenty w wierszu poleceń. W tym celu należy wykorzystać flagę \textit{--d} w~następujący sposób: \textit{--d $<$ścieżka do qrs\_data$>$ --d $<$ścieżka do class\_id$>$}. W przypadku niezdefiniowania ścieżek zostanie wykorzystane domyślne wejście.
+Do uruchomienia programu określenie dwóch plików, jednego zawierającego zbiór zespołów \textit{QRS} i drugiego zawierającego przyporządkowane im klasy. Ścieżki mogą zostać podane jako argumenty w wierszu poleceń, w tym celu należy wykorzystać flagę \textit{--d} w~następujący sposób: \textit{--d $<$ścieżka do qrs\_data$>$ --d $<$ścieżka do class\_id$>$}. W przypadku niezdefiniowania ścieżek zostanie wykorzystane domyślne wejście.
 
 \subsubsection{Lista cech}
 Wykorzystując flagę \textit{--f} można zdefiniować maskę binarną aktywującą poszczególne cechy. Lista cech zawartych w danych testowych jest zgodna z z analizą przedstawioną w rozdziale \ref{sec_wstep} i przedstawia się następująco:\\

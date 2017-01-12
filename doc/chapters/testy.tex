@@ -1,4 +1,4 @@
-\section{Testy i wnioski}
+\section{Testy}
 \label{sec_testy}
 
 \subsection{Dane testowe i metodologia}
@@ -21,7 +21,7 @@ W celu sprawdzenia dokładności przygotowanej metody wykorzystano następujące
 Przed przystąpieniem do analizy dokładności algorytmu przeprowadzono porównanie wydajności obu implementacji. Czas wykonania obu wersji dla poszczególnych zbiorów testowych zamieszczono w tabeli \ref{tab:czasy}. Zgodnie z oczekiwaniami implementacja w \textit{C++} w każdym przypadku jest szybsza od prototypu. W zależności od testowanego zbioru czas wykonania jest nawet do trzech razy szybszy.
 
 Drugim etapem była analiza dokładności algorytmu, szczegółowe wyniki dla poszczególnych zbiorów zostały zamieszczone w tabeli \ref{tab:skutecznosc}.
-W przypadku niektórych testów w kolumnach \textit{swoistość} i \textit{czułość} można zauważyć wartości \texttt{NaN}, oznacza to że podczas obliczania danego wskaźnika wystąpiło dzielenie przez zero. Taka sytuacja może wystąpić w przypadku gdy w danych zbiorze nie ma w ogóle osób chorych, wtedy nie odnotowujemy żadnego przypadku pozytywnie ujemnego ani fałszywie dodatniego przez co podczas obliczania swoistość dzielimy przez 0.  Analogicznie sytuacja może pojawić się podczas obliczania czułości gdy zbiór zawiera jedynie zdrowe osoby.
+W przypadku niektórych testów w kolumnach \textit{swoistość} i \textit{czułość} można zauważyć wartości \texttt{NaN}, oznacza to że podczas obliczania danego wskaźnika wystąpiło dzielenie przez zero. Taka sytuacja może wystąpić w przypadku gdy w danych zbiorze nie ma w ogóle osób chorych, wtedy nie odnotowujemy żadnego przypadku pozytywnie ujemnego ani fałszywie dodatniego przez co podczas obliczania swoistość dzielimy przez 0.  Analogicznie sytuacja może pojawić się podczas obliczania czułości gdy zbiór zawiera jedynie zdrowe osoby. 
 
 \begin{table}
 	\centering
