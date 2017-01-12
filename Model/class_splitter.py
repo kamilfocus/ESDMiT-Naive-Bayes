@@ -5,10 +5,9 @@ from class_descriptor import ClassDescriptor
 class ClassSplitter(object):
 
     def __init__(self, dataset):
-        self.class_descriptors = []
-        classes_datasets = self.__classes_separate(dataset)
-        for key, value in classes_datasets.iteritems():
-            self.class_descriptors.append(ClassDescriptor(value))
+        self.class_datasets = self.__classes_separate(dataset)
+        #for key, value in classes_datasets.iteritems():
+        #    self.class_descriptors.append(ClassDescriptor(value))
 
     def __classes_separate(self, dataset):
         separated_classes = {}

@@ -3,7 +3,7 @@ from pdf import *
 
 class NaiveBayesPredictor(object):
 
-    def __init__(self, test_set, seperated_classes):
+    def __init__(self, test_set, class_descriptors):
         self.correct = 0
         self.tp = 0
         self.tn = 0
@@ -11,7 +11,7 @@ class NaiveBayesPredictor(object):
         self.fn = 0
         
         self.test_set_len = len(test_set)
-        self.descriptors = seperated_classes.class_descriptors
+        self.descriptors = class_descriptors
         
         for input in test_set:
             prediction = self.__make_prediction(input.tolist())
@@ -30,8 +30,9 @@ class NaiveBayesPredictor(object):
     def __calculate_class_probability(self, input, descriptor):
         probability = 1
         idx = 0
-        for mean, stdev in descriptor.params:
+        for mean, var_sum in descriptor.params:
             x = input[idx]
+            stdev = descriptor.get_stdev(var_sum)
             probability *= gaussian_pdf(x, mean, stdev)
             idx += 1
         return probability 

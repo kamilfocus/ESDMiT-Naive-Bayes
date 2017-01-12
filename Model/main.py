@@ -1,14 +1,19 @@
 import csv
 import logging
+import time
+import pickle
+import os.path
 
 from qrs_data import QrsData
 from qrs_data_splitter import QrsDataSplitter
 from class_splitter import ClassSplitter
+from class_descriptor import ClassDescriptor
 from naive_bayes import NaiveBayesPredictor
 
-data_input_path  = '../ReferencyjneDane/101/ConvertedQRSRawData.txt'
-class_input_path = '../ReferencyjneDane/101/Class_IDs.txt'
+data_input_path  = '../ReferencyjneDane/data_unique_labels/100/test_data.txt'
+class_input_path = '../ReferencyjneDane/data_unique_labels/100/test_label.txt'
 log_file         = 'bayes_logger.txt'
+dump_file        = 'bayes.dump'
 
 fields2skip = []
 
@@ -70,21 +75,63 @@ def qrs_data_all_classes_log(qrs_data, max_class_id):
         qrs_data_log(qrs_data, i)
 
 if __name__ == "__main__":
+
+    reset = False
+    test = True
+    learn = not test
+
     logger_setup(log_level = logging.INFO, log_to_file = True)
     logging.info('Naive Bayes Classification')
 
     qrs_dataset = named_csv_data_load(data_input_path, class_input_path)
-    training_set, test_set = QrsDataSplitter(0.67).split(qrs_dataset)
-
-    max_class_id = max(qrs_data.class_id for qrs_data in qrs_dataset)
-    logging.debug('Training Set\n')
-    qrs_data_all_classes_log(training_set, max_class_id)
-    logging.debug('\nTest Set\n')
-    qrs_data_all_classes_log(test_set, max_class_id)
-
-    class_splitter = ClassSplitter(training_set)
-    logging.info(class_splitter)
     
-    naive_bayes = NaiveBayesPredictor(test_set, class_splitter)
-    logging.info(naive_bayes)
+    start_time = time.time()
+    
+    max_class_id = max(qrs_data.class_id for qrs_data in qrs_dataset)
+    
+    training_set = None
+    test_set = None
+    if not test and not learn:
+        training_set, test_set = QrsDataSplitter(0.67).split(qrs_dataset)
+
+        logging.debug('Training Set\n')
+        qrs_data_all_classes_log(training_set, max_class_id)
+        logging.debug('\nTest Set\n')
+        qrs_data_all_classes_log(test_set, max_class_id)
+    elif learn:
+        training_set = list(qrs_dataset)
+    elif test:
+        test_set = list(qrs_dataset)
+
+    class_descriptors = []
+    if os.path.exists(dump_file):
+        with open(dump_file, 'rb') as f:
+            class_descriptors = pickle.load(f)
+
+    class_id_list = []
+    for cd in class_descriptors:
+        class_id_list.append(cd.class_id)
+        
+    if training_set:
+        class_datasets = ClassSplitter(training_set).class_datasets
+    
+        for key, value in class_datasets.iteritems():
+            try:
+                qrs_class = class_descriptors.pop(class_ids_list.index(key))
+            except Exception:
+                qrs_class = ClassDescriptor(key)
+
+            for class_instance in value:
+                qrs_class.learn(class_instance)
+            class_descriptors.append(qrs_class)
+    
+
+    if test_set:
+        naive_bayes = NaiveBayesPredictor(test_set, class_descriptors)
+        logging.info(naive_bayes)
+    
+    logging.info('Execution time: %f [s]' % (time.time() - start_time))
+    
+    with open(dump_file, 'wb') as f:
+        pickle.dump(class_descriptors, f)
 
