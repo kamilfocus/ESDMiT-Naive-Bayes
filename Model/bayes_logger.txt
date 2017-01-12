@@ -1,9 +1,1 @@
-main.py: Naive Bayes Classification
-main.py: Prediction Summary: 
-Test set length: 204
-Number of correct classifications: 204
-Classification accuracy: 100.000000%
-Sensitivity: 100.000000%
-Specificity: 1.#IND%
-
-main.py: Execution time: 0.010000 [s]
+str= 'main.py: Naive Bayes Classification\nmain.py: Execution time: 0.007000[s]\n'

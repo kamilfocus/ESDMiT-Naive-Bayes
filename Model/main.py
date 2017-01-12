@@ -141,7 +141,7 @@ if __name__ == "__main__":
         naive_bayes = NaiveBayesPredictor(test_set, class_descriptors)
         logging.info(naive_bayes)
     
-    logging.info('Execution time: %f [s]' % (time.time() - start_time))
+    logging.info('Execution time: %f[s]' % (time.time() - start_time))
     
     with open(dump_file, 'wb') as f:
         pickle.dump(class_descriptors, f)
