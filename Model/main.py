@@ -2,7 +2,8 @@ import csv
 import logging
 import time
 import pickle
-import os.path
+import os
+import argparse
 
 from qrs_data import QrsData
 from qrs_data_splitter import QrsDataSplitter
@@ -76,9 +77,19 @@ def qrs_data_all_classes_log(qrs_data, max_class_id):
 
 if __name__ == "__main__":
 
-    reset = False
-    test = True
-    learn = not test
+    parser = argparse.ArgumentParser(description = 'Naive Bayes Classification CLI')
+    parser.add_argument('-r', action="store_true", default=False, dest='reset')
+    parser.add_argument('-t', action="store_true", default=False, dest='test')
+    parser.add_argument('-l', action="store_true", default=False, dest='learn')
+    parser.add_argument('-d', action='append', dest='input_paths', default=[])
+    
+    parser_res = parser.parse_args()
+    
+    data_input_path = parser_res.input_paths[0]
+    class_input_path = parser_res.input_paths[1]
+    
+    if parser_res.reset and os.path.exists(dump_file):
+        os.remove(dump_file)
 
     logger_setup(log_level = logging.INFO, log_to_file = True)
     logging.info('Naive Bayes Classification')
@@ -91,16 +102,16 @@ if __name__ == "__main__":
     
     training_set = None
     test_set = None
-    if not test and not learn:
+    if not parser_res.test and not parser_res.learn:
         training_set, test_set = QrsDataSplitter(0.67).split(qrs_dataset)
 
         logging.debug('Training Set\n')
         qrs_data_all_classes_log(training_set, max_class_id)
         logging.debug('\nTest Set\n')
         qrs_data_all_classes_log(test_set, max_class_id)
-    elif learn:
+    elif parser_res.learn:
         training_set = list(qrs_dataset)
-    elif test:
+    elif parser_res.test:
         test_set = list(qrs_dataset)
 
     class_descriptors = []
