@@ -92,13 +92,13 @@ int main(int argc, char** argv) {
     }
 
     //Bayes Logic
-    clock_t begin = clock();
 
     LOG("*** Naive Bayes Classification. Loading data...\n");
     std::list<Qrs> qrs_list = csv_read(data_input_path, class_input_path);
     LOG("*** Data has been successfully loaded.\n");
-
+    clock_t begin = clock();
     QrsClassManager qrs_class_manager(reset_switch.getValue(), fmask);
+
     if (!test_switch.getValue()){
 
         std::map<size_t, std::list<Qrs>> training_data;
