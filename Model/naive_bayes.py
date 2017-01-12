@@ -49,13 +49,19 @@ class NaiveBayesPredictor(object):
         return best_id        
             
     def get_accuracy(self):
-        return self.correct/float(self.test_set_len)
+        return 100.0*self.correct/float(self.test_set_len)
         
     def __str__(self):
         output_str = str('Prediction Summary: \n')
         output_str += str('Test set length: %d\n' % self.test_set_len)
         output_str += str('Number of correct classifications: %d\n' % self.correct)
-        output_str += str('Classification accuracy: %f\n' % self.get_accuracy())
-        output_str += str('Sensitivity: %f%%\n' % (float(self.tp)/(self.tp + self.fn)*100))
-        output_str += str('Specificity: %f%%\n' % (float(self.tn)/(self.tn + self.fp)*100)) 
+        output_str += str('Classification accuracy: %f%%\n' % self.get_accuracy())
+        try:
+            output_str += str('Sensitivity: %f%%\n' % (float(self.tp)/(self.tp + self.fn)*100))
+        except:
+            output_str += str('Sensitivity: 1.#IND%\n')
+        try:
+            output_str += str('Specificity: %f%%\n' % (float(self.tn)/(self.tn + self.fp)*100))
+        except:
+            output_str += str('Specificity: 1.#IND%\n')
         return output_str

@@ -46,8 +46,18 @@ def report_generate(data_label, data):
 
 if __name__ == "__main__":
     with open('report.txt', 'w') as report:
+        sum     = 4*[0]
+        samples = 4*[0]
         for root, dirs, files in os.walk(root_path):
             for dir in dirs:
                 path = os.path.join(root, dir)
                 data = bayes_call(learn_cmd % (path, path), test_cmd % (path, path))
+                for i, item in enumerate(data):
+                    if not isinstance(item, str):
+                        sum[i]     += item
+                        samples[i] += 1
                 report.write(report_generate(dir, data) + '\n')
+        mean = 4*[0]
+        for i, item in enumerate(sum):
+            mean[i] = item/samples[i]
+        report.write(report_generate('Srednia', mean) + '\n')
